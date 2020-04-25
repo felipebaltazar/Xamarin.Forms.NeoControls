@@ -5,8 +5,8 @@
  [![NuGet](https://img.shields.io/nuget/v/Xamarin.Forms.NeoControls.svg)](https://www.nuget.org/packages/Xamarin.Forms.NeoControls/)
 
 ## Examples
-![exemplo1](https://user-images.githubusercontent.com/19656249/80286397-94d62280-8701-11ea-82f7-69610614017b.gif)
-![exemplo2](https://user-images.githubusercontent.com/19656249/80286398-96074f80-8701-11ea-8196-a787658788d0.gif)
+![example](https://user-images.githubusercontent.com/19656249/80289178-62cdbc00-8713-11ea-9333-5e13ad8bc7fc.gif)
+
 
 ## Getting started
 
