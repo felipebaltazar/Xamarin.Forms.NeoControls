@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/felipebaltazar/Xamarin.Forms.NeoControls</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/felipebaltazar/Xamarin.Forms.NeoControls</RepositoryUrl>
+    <PackageTags>neomorphism, xamarin, xamarin.forms, skia, neomorphic</PackageTags>
+    <Description>Neomorphic controls for Xamarin.Forms</Description>
+    <Version>1.0.0-pre</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +20,13 @@
     <EmbeddedResource Update="NeoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ namespace Xamarin.Forms.NeoControls
     public class NeoButton : NeoView
     {
         private const int DEFAULT_CORNER_RADIUS = 3;
+        private bool isPerformingTap;
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
             propertyName: nameof(Command),
@@ -86,19 +87,31 @@ namespace Xamarin.Forms.NeoControls
             return PressAnimation(nameof(AnimateClick), transform, length, easing);
         }
 
-        protected virtual async void OnButtonTapped(object sender, EventArgs e)
+        protected virtual async Task PerformButtonTappedAsync()
         {
-            if (Command?.CanExecute(CommandParameter) ?? false)
-                Command.Execute(CommandParameter);
-
-            if(ClickMode == ClickMode.Toggle)
-            {
-                IsChecked = !IsChecked;
+            if (isPerformingTap)
                 return;
-            }
 
-            await AnimateClick(ShadowDistance * -1);
-            await AnimateClick(ShadowDistance * -1);
+            isPerformingTap = true;
+
+            try
+            {
+                if (Command?.CanExecute(CommandParameter) ?? false)
+                    Command.Execute(CommandParameter);
+
+                if (ClickMode == ClickMode.Toggle)
+                {
+                    IsChecked = !IsChecked;
+                    return;
+                }
+
+                await AnimateClick(ShadowDistance * -1);
+                await AnimateClick(ShadowDistance * -1);
+            }
+            finally
+            {
+                isPerformingTap = false;
+            }
         }
 
         protected override void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args)
@@ -177,13 +190,19 @@ namespace Xamarin.Forms.NeoControls
             return taskCompletionSource.Task;
         }
 
-        private static async void OnIsCheckedChanged(BindableObject bindable, object oldValue, object newValue)
+        private void OnButtonTapped(object sender, EventArgs e) =>
+            PerformButtonTappedAsync().SafeFireAndForget();
+
+        private static void OnIsCheckedChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if(bindable is NeoButton neoButton)
-            { 
-                await neoButton.AnimateClick(neoButton.ShadowDistance * -1);
-                await neoButton.AnimateClick(neoButton.ShadowDistance);
-            }
+                PerformIsCheckedAnimationAsync(neoButton).SafeFireAndForget();
+        }
+
+        private static async Task PerformIsCheckedAnimationAsync(NeoButton neoButton)
+        {
+            await neoButton.AnimateClick(neoButton.ShadowDistance * -1);
+            await neoButton.AnimateClick(neoButton.ShadowDistance);
         }
     }
 }
