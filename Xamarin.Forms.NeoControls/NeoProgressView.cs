@@ -20,6 +20,7 @@ namespace Xamarin.Forms.NeoControls
             returnType: typeof(double),
             declaringType: typeof(NeoProgressView),
             defaultValue: .4,
+            propertyChanging: OnProgressChanging,
             propertyChanged: OnVisualPropertyChanged);
 
         public static readonly BindableProperty ThicknessProperty = BindableProperty.Create(
@@ -49,6 +50,8 @@ namespace Xamarin.Forms.NeoControls
 
         public virtual Task<bool> AnimateProgress(float toValue, uint length = 250, Easing easing = null)
         {
+            EnsureProgressRange(toValue);
+
             float transform(double t) => (float)(t * (toValue));
             return ProgressAnimation(nameof(AnimateProgress), transform, length, easing);
         }
@@ -134,7 +137,7 @@ namespace Xamarin.Forms.NeoControls
         protected virtual Task<bool> ProgressAnimation(string name, Func<double, float> transform, uint length, Easing easing)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
-            this.Animate(
+            (this).Animate(
                 name,
                 transform,
                 (progress) => Progress = progress,
@@ -145,5 +148,14 @@ namespace Xamarin.Forms.NeoControls
 
             return taskCompletionSource.Task;
         }
+
+        private static void EnsureProgressRange(float progress)
+        {
+            if (progress > 1f || progress < 0)
+                throw new ArgumentOutOfRangeException($"{nameof(progress)} should be between 0 and 1");
+        }
+
+        private static void OnProgressChanging(BindableObject bindable, object oldValue, object newValue) =>
+            EnsureProgressRange((float)newValue);
     }
 }
