@@ -43,4 +43,14 @@ xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoCon
         </neo:NeoButton>
 ```
 
+## Property reference
 
+| Property           | What it does                                                          | Extra info                                                                 |
+| ------------------ | --------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `CornerRadius`     | A `CornerRadius` object representing each individual corner's radius. | Uses the `CornerRadius` struct allowing you to specify individual corners. |
+| `Elevation`        | Set this value to chenge element depth effect.                        |                                                                            |
+| `InnerView`        | View that will be shown inside the neo control.                       |                                                                            |
+| `ShadowBlur`       | Set this value to change shadow blur effect.                          |                                                                            |
+| `ShadowDistance`   | Set this value to change shadow distance relative from control.       |                                                                            |
+| `DarkShadowColor`  | The Dark color that will be applied on draw the dark shadow.          | This will be applied with `Elevation` property, as Alpha parameter.        |
+| `LightShadowColor` | The White color that will be applied on draw the light shadow.        |                                                                            |

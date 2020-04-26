@@ -74,6 +74,8 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(IsCheckedProperty, value);
         }
 
+        public event EventHandler Clicked;
+
         public NeoButton()
         {
             var tapGesture = new TapGestureRecognizer();
@@ -89,13 +91,15 @@ namespace Xamarin.Forms.NeoControls
 
         protected virtual async Task PerformButtonTappedAsync()
         {
-            if (isPerformingTap)
+            if (isPerformingTap || !IsEnabled)
                 return;
 
             isPerformingTap = true;
 
             try
             {
+                Clicked?.Invoke(this, EventArgs.Empty);
+
                 if (Command?.CanExecute(CommandParameter) ?? false)
                     Command.Execute(CommandParameter);
 
@@ -199,10 +203,7 @@ namespace Xamarin.Forms.NeoControls
                 PerformIsCheckedAnimationAsync(neoButton).SafeFireAndForget();
         }
 
-        private static async Task PerformIsCheckedAnimationAsync(NeoButton neoButton)
-        {
+        private static async Task PerformIsCheckedAnimationAsync(NeoButton neoButton) =>
             await neoButton.AnimateClick(neoButton.ShadowDistance * -1);
-            await neoButton.AnimateClick(neoButton.ShadowDistance);
-        }
     }
 }
