@@ -93,7 +93,6 @@ namespace Xamarin.Forms.NeoControls
             var info = args.Info;
             var surface = args.Surface;
             var canvas = surface.Canvas;
-
             var drawPadding = Convert.ToSingle(ShadowBlur * 2);
 
             if (!ShowOut)
@@ -104,43 +103,27 @@ namespace Xamarin.Forms.NeoControls
             var retangleHeight = info.Height - diameter;
             var fShadowDistance = Convert.ToSingle(ShadowDistance);
 
-
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
                 var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
-
-
-
                 if (ShowOut)
                 {
-
-
                     // MODO NORMAL
                     paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
                     canvas.DrawPath(path, paint);
-
                     paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
                     canvas.DrawPath(path, paint);
-
 
                     // background
                     paint.ImageFilter = null;
                     if (!IsSoft)
                         paint.MaskFilter = null; // REMOVER PARA FICAR SOFT
                     canvas.DrawPath(path, paint);
-
-                    
                 }
-
-                
 
                 if (ShowIn)
                 {
-
                     canvas.ClipPath(path);
-
-                    
-
                     paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
                     paint.Style = SKPaintStyle.Stroke;
                     paint.StrokeWidth = fShadowDistance;
@@ -151,7 +134,6 @@ namespace Xamarin.Forms.NeoControls
                     paint.StrokeWidth = fShadowDistance;
                     paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
                     canvas.DrawPath(path, paint);
-
                 }
 
                 if (BorderColor != Color.Transparent)
@@ -164,7 +146,6 @@ namespace Xamarin.Forms.NeoControls
                     paint.StrokeWidth = Convert.ToSingle(BorderWidth);
                     canvas.DrawPath(path, paint);
                 }
-
             }
 
         }
