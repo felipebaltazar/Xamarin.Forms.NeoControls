@@ -76,7 +76,7 @@ namespace Xamarin.Forms.NeoControls
                     paint.Color = BarColor.ToSKColor();
                     canvas.DrawPath(barPath, paint);
 
-                    paint.Color = BackgroundColor.ToSKColor();
+                    paint.Color = BaseColor.ToSKColor();
                     paint.Style = SKPaintStyle.Stroke;
                     paint.StrokeWidth = Convert.ToSingle(Thickness);
                     paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, fShadowBlur);
@@ -155,7 +155,11 @@ namespace Xamarin.Forms.NeoControls
                 throw new ArgumentOutOfRangeException($"{nameof(progress)} should be between 0 and 1");
         }
 
-        private static void OnProgressChanging(BindableObject bindable, object oldValue, object newValue) =>
-            EnsureProgressRange((float)newValue);
+        private static void OnProgressChanging(BindableObject bindable, object oldValue, object newValue)
+        {
+            //EnsureProgressRange((float)newValue);
+        }
+        
+            
     }
 }

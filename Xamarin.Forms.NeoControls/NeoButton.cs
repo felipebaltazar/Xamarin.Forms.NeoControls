@@ -81,6 +81,7 @@ namespace Xamarin.Forms.NeoControls
             var tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += OnButtonTapped;
             GestureRecognizers.Add(tapGesture);
+            
         }
 
         public virtual Task<bool> AnimateClick(double toValue, uint length = 250, Easing easing = null)
