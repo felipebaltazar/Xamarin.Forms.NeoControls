@@ -50,6 +50,13 @@ namespace Xamarin.Forms.NeoControls
             defaultValue: null,
             propertyChanged: OnInnerViewChanged);
 
+        public static readonly BindableProperty BaseColorProperty = BindableProperty.Create(
+            propertyName: nameof(BaseColor),
+            returnType: typeof(Color),
+            declaringType: typeof(NeoView),
+            defaultValue: Color.Gray,
+            propertyChanged: OnVisualPropertyChanged);
+
         public double Elevation
         {
             get => (double)GetValue(ElevationProperty);
@@ -80,13 +87,25 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(DarkShadowColorProperty, value);
         }
 
+        public Color BaseColor
+        {
+            get => (Color)GetValue(BaseColorProperty);
+            set => SetValue(BaseColorProperty, value);
+        }
+
         public View InnerView
         {
             get => (View)GetValue(InnerViewProperty);
             set => SetValue(InnerViewProperty, value);
         }
 
-        public NeoView() => InitializeComponent();
+        
+
+        public NeoView() {
+            InitializeComponent();
+        }
+
+        
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -98,6 +117,8 @@ namespace Xamarin.Forms.NeoControls
 
         protected virtual void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
+            
+
             var surface = args.Surface;
             var canvas = surface.Canvas;
 
@@ -105,12 +126,13 @@ namespace Xamarin.Forms.NeoControls
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = BackgroundColor.ToSKColor();
+                paint.Color = BaseColor.ToSKColor();
                 paint.Style = SKPaintStyle.Fill;
                 paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
 
                 DrawControl(paint, args);
             }
+            
         }
 
         protected abstract void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args);
