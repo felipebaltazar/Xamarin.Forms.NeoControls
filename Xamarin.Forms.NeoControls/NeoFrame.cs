@@ -132,6 +132,28 @@ namespace Xamarin.Forms.NeoControls
                     
                 }
 
+                
+
+                if (ShowIn)
+                {
+
+                    canvas.ClipPath(path);
+
+                    
+
+                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
+                    paint.Style = SKPaintStyle.Stroke;
+                    paint.StrokeWidth = fShadowDistance;
+                    paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                    canvas.DrawPath(path, paint);
+
+                    paint.Style = SKPaintStyle.Stroke;
+                    paint.StrokeWidth = fShadowDistance;
+                    paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
+                    canvas.DrawPath(path, paint);
+
+                }
+
                 if (BorderColor != Color.Transparent)
                 {
                     ///border
@@ -142,28 +164,6 @@ namespace Xamarin.Forms.NeoControls
                     paint.StrokeWidth = Convert.ToSingle(BorderWidth);
                     canvas.DrawPath(path, paint);
                 }
-
-                if (ShowIn)
-                {
-
-                    canvas.ClipPath(path);
-
-                    //fShadowDistance = Convert.ToSingle(ShadowDistance * 1);
-                    var fStrokeWidth = Convert.ToSingle(ShadowDistance * 1);
-
-                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
-                    paint.Style = SKPaintStyle.Stroke;
-                    paint.StrokeWidth = fStrokeWidth;
-                    paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                    canvas.DrawPath(path, paint);
-
-                    paint.Style = SKPaintStyle.Stroke;
-                    paint.StrokeWidth = fStrokeWidth;
-                    paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
-                    canvas.DrawPath(path, paint);
-
-                }
-
 
             }
 
