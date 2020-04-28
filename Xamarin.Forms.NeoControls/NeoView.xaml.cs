@@ -106,8 +106,6 @@ namespace Xamarin.Forms.NeoControls
 
         protected virtual void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
-            
-
             var surface = args.Surface;
             var canvas = surface.Canvas;
 
