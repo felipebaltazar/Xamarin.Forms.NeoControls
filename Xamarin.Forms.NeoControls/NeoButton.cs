@@ -48,12 +48,6 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(CommandParameterProperty, value);
         }
 
-        public CornerRadius CornerRadius
-        {
-            get => (CornerRadius)GetValue(CornerRadiusProperty);
-            set => SetValue(CornerRadiusProperty, value);
-        }
-
         public ClickMode ClickMode
         {
             get => (ClickMode)GetValue(ClickModeProperty);
@@ -73,7 +67,6 @@ namespace Xamarin.Forms.NeoControls
             var tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += OnButtonTapped;
             GestureRecognizers.Add(tapGesture);
-            
         }
 
         public virtual Task<bool> AnimateClick(double toValue, uint length = 250, Easing easing = null)
@@ -117,24 +110,19 @@ namespace Xamarin.Forms.NeoControls
             var surface = args.Surface;
             var canvas = surface.Canvas;
 
-            var drawPadding = Convert.ToSingle(ShadowBlur * 2);
+            var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
+                0 : Convert.ToSingle(ShadowBlur * 2);
+
             var diameter = drawPadding * 2;
             var retangleWidth = info.Width - diameter;
             var retangleHeight = info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
-                var fShadowDistance = Convert.ToSingle(ShadowDistance);
-
-                paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
-                canvas.DrawPath(path, paint);
-
-                paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                canvas.DrawPath(path, paint);
-
                 paint.ImageFilter = null;
-                paint.MaskFilter = null;
+                if (DrawMode == DrawMode.Flat)
+                    paint.MaskFilter = null;
+
                 canvas.DrawPath(path, paint);
             }
         }

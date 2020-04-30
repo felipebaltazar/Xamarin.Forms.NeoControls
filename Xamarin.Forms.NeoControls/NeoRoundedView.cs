@@ -24,7 +24,7 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(CornerRadiusProperty, value);
         }
 
-        protected virtual SKPath CreatePath(float retangleWidth, float retangleHeight, float drawPadding)
+        protected override SKPath CreatePath(float retangleWidth, float retangleHeight, float drawPadding)
         {
             var path = new SKPath();
             var fTopLeftRadius = Convert.ToSingle(CornerRadius.TopLeft);

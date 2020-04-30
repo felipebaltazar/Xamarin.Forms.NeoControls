@@ -56,7 +56,7 @@ namespace Xamarin.Forms.NeoControls
             return ProgressAnimation(nameof(AnimateProgress), transform, length, easing);
         }
 
-        protected override void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected override void PreDraw(SKPaint paint, SKPaintSurfaceEventArgs args)
         {
             var info = args.Info;
             var surface = args.Surface;
@@ -69,36 +69,39 @@ namespace Xamarin.Forms.NeoControls
             var retangleHeight = info.Height - diameter;
             var cornerRadius = retangleHeight / 2;
 
-            using (var path = CreateStrokePath(padding, retangleWidth, retangleHeight, cornerRadius))
+            using (var barPath = CreateBarPath(paint, canvas, padding, retangleWidth, retangleHeight, cornerRadius))
             {
-                using (var barPath = CreateBarPath(paint, canvas, padding, retangleWidth, retangleHeight, cornerRadius ))
-                {
-                    paint.Color = BarColor.ToSKColor();
-                    canvas.DrawPath(barPath, paint);
-
-                    paint.Color = BaseColor.ToSKColor();
-                    paint.Style = SKPaintStyle.Stroke;
-                    paint.StrokeWidth = Convert.ToSingle(Thickness);
-                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, fShadowBlur);
-
-                    var shadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
-                    var fShadowDistance = Convert.ToSingle(ShadowDistance);
-
-                    paint.ImageFilter = shadow.ToSKDropShadow(fShadowDistance);
-                    canvas.DrawPath(path, paint);
-
-                    paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                    canvas.DrawPath(path, paint);
-
-                    paint.ImageFilter = null;
-                    paint.MaskFilter = null;
-                    canvas.DrawPath(path, paint);
-                }
+                paint.Color = BarColor.ToSKColor();
+                canvas.DrawPath(barPath, paint);
             }
         }
 
-        protected virtual SKPath CreateStrokePath(float padding, float retangleWidth, float retangleHeight, float cornerRadius)
+        protected override void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args)
         {
+            var info = args.Info;
+            var surface = args.Surface;
+            var canvas = surface.Canvas;
+
+            var fShadowBlur = Convert.ToSingle(ShadowBlur);
+            var padding = fShadowBlur * 3f;
+            var diameter = padding * 2;
+            var retangleWidth = info.Width - diameter;
+            var retangleHeight = info.Height - diameter;
+
+            using (var path = CreatePath(retangleWidth, retangleHeight, padding))
+            {
+                paint.ImageFilter = null;
+                paint.Style = SKPaintStyle.Stroke;
+                if (DrawMode == DrawMode.Flat)
+                    paint.MaskFilter = null;
+
+                canvas.DrawPath(path, paint);
+            }
+        }
+
+        protected override SKPath CreatePath( float retangleWidth, float retangleHeight, float padding)
+        {
+            var cornerRadius = retangleHeight / 2;
             var path = new SKPath();
             path.MoveTo(cornerRadius + padding, padding);
 
@@ -111,6 +114,41 @@ namespace Xamarin.Forms.NeoControls
 
             path.Close();
             return path;
+        }
+
+        protected override void DrawInnerShadow(SKPaint paint, SKPaintSurfaceEventArgs args)
+        {
+            //todo
+        }
+
+        protected override void DrawOuterShadow(SKPaint paint, SKPaintSurfaceEventArgs args)
+        {
+            var info = args.Info;
+            var surface = args.Surface;
+            var canvas = surface.Canvas;
+
+            var fShadowBlur = Convert.ToSingle(ShadowBlur);
+            var padding = fShadowBlur * 3f;
+            var diameter = padding * 2;
+            var retangleWidth = info.Width - diameter;
+            var retangleHeight = info.Height - diameter;
+
+            using (var path = CreatePath(retangleWidth, retangleHeight, padding))
+            {
+                paint.Color = BackgroundColor.ToSKColor();
+                paint.Style = SKPaintStyle.Stroke;
+                paint.StrokeWidth = Convert.ToSingle(Thickness);
+                paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, fShadowBlur);
+
+                var shadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
+                var fShadowDistance = Convert.ToSingle(ShadowDistance);
+
+                paint.ImageFilter = shadow.ToSKDropShadow(fShadowDistance);
+                canvas.DrawPath(path, paint);
+
+                paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                canvas.DrawPath(path, paint);
+            }
         }
 
         protected virtual SKPath CreateBarPath(SKPaint paint, SKCanvas canvas, float padding, float retangleWidth, float retangleHeight, float cornerRadius)
