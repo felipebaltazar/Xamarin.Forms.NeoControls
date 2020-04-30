@@ -7,9 +7,8 @@ using Xamarin.Forms.NeoControls.Extensions;
 
 namespace Xamarin.Forms.NeoControls
 {
-    public class NeoButton : NeoView
+    public class NeoButton : NeoRoundedView
     {
-        private const int DEFAULT_CORNER_RADIUS = 3;
         private bool isPerformingTap;
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
@@ -23,13 +22,6 @@ namespace Xamarin.Forms.NeoControls
             returnType: typeof(object),
             declaringType: typeof(NeoButton),
             defaultValue: null);
-
-        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
-            propertyName: nameof(CornerRadius),
-            returnType: typeof(CornerRadius),
-            declaringType: typeof(NeoButton),
-            defaultValue: new CornerRadius(DEFAULT_CORNER_RADIUS),
-            propertyChanged: OnVisualPropertyChanged);
 
         public static readonly BindableProperty ClickModeProperty = BindableProperty.Create(
             propertyName: nameof(ClickMode),
@@ -54,12 +46,6 @@ namespace Xamarin.Forms.NeoControls
         {
             get => (object)GetValue(CommandParameterProperty);
             set => SetValue(CommandParameterProperty, value);
-        }
-
-        public CornerRadius CornerRadius
-        {
-            get => (CornerRadius)GetValue(CornerRadiusProperty);
-            set => SetValue(CornerRadiusProperty, value);
         }
 
         public ClickMode ClickMode
@@ -124,59 +110,21 @@ namespace Xamarin.Forms.NeoControls
             var surface = args.Surface;
             var canvas = surface.Canvas;
 
-            var drawPadding = Convert.ToSingle(ShadowBlur * 2);
+            var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
+                0 : Convert.ToSingle(ShadowBlur * 2);
+
             var diameter = drawPadding * 2;
             var retangleWidth = info.Width - diameter;
             var retangleHeight = info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
-                var fShadowDistance = Convert.ToSingle(ShadowDistance);
-
-                paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
-                canvas.DrawPath(path, paint);
-
-                paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                canvas.DrawPath(path, paint);
-
                 paint.ImageFilter = null;
-                paint.MaskFilter = null;
+                if (DrawMode == DrawMode.Flat)
+                    paint.MaskFilter = null;
+
                 canvas.DrawPath(path, paint);
             }
-        }
-
-        protected virtual SKPath CreatePath(float retangleWidth, float retangleHeight, float drawPadding)
-        {
-            var path = new SKPath();
-            var fTopLeftRadius = Convert.ToSingle(CornerRadius.TopLeft);
-            var fTopRightRadius = Convert.ToSingle(CornerRadius.TopRight);
-            var fBottomLeftRadius = Convert.ToSingle(CornerRadius.BottomLeft);
-            var fBottomRightRadius = Convert.ToSingle(CornerRadius.BottomRight);
-
-            var startX = fTopLeftRadius + drawPadding;
-            var startY = drawPadding;
-
-            path.MoveTo(startX, startY);
-
-            path.LineTo(retangleWidth - fTopRightRadius + drawPadding, startY);
-            path.ArcTo(fTopRightRadius,
-                new SKPoint(retangleWidth + drawPadding, fTopRightRadius + drawPadding));
-
-            path.LineTo(retangleWidth + drawPadding, retangleHeight - fBottomRightRadius + drawPadding);
-            path.ArcTo(fBottomRightRadius,
-                 new SKPoint(retangleWidth - fBottomRightRadius + drawPadding, retangleHeight + drawPadding));
-
-            path.LineTo(fBottomLeftRadius + drawPadding, retangleHeight + drawPadding);
-            path.ArcTo(fBottomLeftRadius,
-                new SKPoint(drawPadding, retangleHeight - fBottomLeftRadius + drawPadding));
-
-            path.LineTo(drawPadding, fTopLeftRadius + drawPadding);
-            path.ArcTo(fTopLeftRadius, new SKPoint(startX, startY));
-
-            path.Close();
-
-            return path;
         }
 
         protected virtual Task<bool> PressAnimation(string name, Func<double, double> transform, uint length, Easing easing)
