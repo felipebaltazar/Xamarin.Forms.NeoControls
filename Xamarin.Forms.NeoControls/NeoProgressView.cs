@@ -195,7 +195,7 @@ namespace Xamarin.Forms.NeoControls
 
         private static void OnProgressChanging(BindableObject bindable, object oldValue, object newValue)
         {
-            EnsureProgressRange(Convert.ToSingle(newValue));
+             EnsureProgressRange(Convert.ToSingle(newValue));
         }
     }
 }
