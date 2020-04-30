@@ -113,13 +113,21 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(ShadowDrawModeProperty, value);
         }
 
+        public Color BaseColor = Color.Gray;
+
         public NeoView() => InitializeComponent();
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if (BackgroundColorProperty.PropertyName.Equals(propertyName))
-                canvas.InvalidateSurface();
+            if (BackgroundColor != Color.Transparent)
+
+            {
+                 if (BackgroundColorProperty.PropertyName.Equals(propertyName))
+                    canvas.InvalidateSurface();
+                BaseColor = BackgroundColor;
+                BackgroundColor = Color.Transparent;
+            }
         }
 
         protected virtual void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -131,7 +139,7 @@ namespace Xamarin.Forms.NeoControls
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = BackgroundColor.ToSKColor();
+                paint.Color = BaseColor.ToSKColor();
                 paint.Style = SKPaintStyle.Fill;
 
                 var drawOuterShadow = ShadowDrawMode == ShadowDrawMode.All || ShadowDrawMode == ShadowDrawMode.OuterOnly;
@@ -142,7 +150,7 @@ namespace Xamarin.Forms.NeoControls
                 if (drawOuterShadow)
                     DrawOuterShadow(paint, args);
 
-                paint.Color = BackgroundColor.ToSKColor();
+                paint.Color = BaseColor.ToSKColor();
                 DrawControl(paint, args);
 
                 if (drawInnerShadow)

@@ -135,7 +135,7 @@ namespace Xamarin.Forms.NeoControls
 
             using (var path = CreatePath(retangleWidth, retangleHeight, padding))
             {
-                paint.Color = BackgroundColor.ToSKColor();
+                paint.Color = BaseColor.ToSKColor();
                 paint.Style = SKPaintStyle.Stroke;
                 paint.StrokeWidth = Convert.ToSingle(Thickness);
                 paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, fShadowBlur);
