@@ -30,38 +30,34 @@ namespace Xamarin.Forms.NeoControls
             set => SetValue(BorderWidthProperty, value);
         }
 
-        protected override void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected override void DrawControl(RenderContext renderContext)
         {
-            var info = args.Info;
-            var surface = args.Surface;
-            var canvas = surface.Canvas;
-
             var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
                 0 : Convert.ToSingle(ShadowBlur * 2);
 
             var diameter = drawPadding * 2;
-            var retangleWidth = info.Width - diameter;
-            var retangleHeight = info.Height - diameter;
+            var retangleWidth = renderContext.Info.Width - diameter;
+            var retangleHeight = renderContext.Info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                paint.ImageFilter = null;
+                renderContext.Paint.ImageFilter = null;
                 if (DrawMode == DrawMode.Flat)
-                    paint.MaskFilter = null;
+                    renderContext.Paint.MaskFilter = null;
 
-                canvas.DrawPath(path, paint);
+                renderContext.Canvas.DrawPath(path, renderContext.Paint);
 
                 if (BorderColor != Color.Transparent)
-                    DrawBorder(paint, canvas, path);
+                    DrawBorder(renderContext, path);
             }
         }
 
-        protected virtual void DrawBorder(SKPaint paint, SKCanvas canvas, SKPath path)
+        protected virtual void DrawBorder(RenderContext renderContext, SKPath path)
         {
-            paint.Style = SKPaintStyle.Stroke;
-            paint.Color = BorderColor.ToSKColor();
-            paint.StrokeWidth = Convert.ToSingle(BorderWidth);
-            canvas.DrawPath(path, paint);
+            renderContext.Paint.Style = SKPaintStyle.Stroke;
+            renderContext.Paint.Color = BorderColor.ToSKColor();
+            renderContext.Paint.StrokeWidth = Convert.ToSingle(BorderWidth);
+            renderContext.Canvas.DrawPath(path, renderContext.Paint);
         }
     }
 }
