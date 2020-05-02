@@ -1,8 +1,5 @@
 ﻿using SkiaSharp;
-using SkiaSharp.Views.Forms;
 using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms.NeoControls.Extensions;
 
 namespace Xamarin.Forms.NeoControls

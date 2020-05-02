@@ -1,6 +1,4 @@
-﻿using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms.NeoControls.Extensions;
@@ -104,26 +102,22 @@ namespace Xamarin.Forms.NeoControls
             }
         }
 
-        protected override void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected override void DrawControl(RenderContext renderContext)
         {
-            var info = args.Info;
-            var surface = args.Surface;
-            var canvas = surface.Canvas;
-
             var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
                 0 : Convert.ToSingle(ShadowBlur * 2);
 
             var diameter = drawPadding * 2;
-            var retangleWidth = info.Width - diameter;
-            var retangleHeight = info.Height - diameter;
+            var retangleWidth = renderContext.Info.Width - diameter;
+            var retangleHeight = renderContext.Info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                paint.ImageFilter = null;
+                renderContext.Paint.ImageFilter = null;
                 if (DrawMode == DrawMode.Flat)
-                    paint.MaskFilter = null;
+                    renderContext.Paint.MaskFilter = null;
 
-                canvas.DrawPath(path, paint);
+                renderContext.Canvas.DrawPath(path, renderContext.Paint);
             }
         }
 

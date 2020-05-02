@@ -1,7 +1,6 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
-using System.Runtime.CompilerServices;
 using Xamarin.Forms.NeoControls.Extensions;
 
 namespace Xamarin.Forms.NeoControls
@@ -9,6 +8,20 @@ namespace Xamarin.Forms.NeoControls
     [ContentProperty(nameof(InnerView))]
     public abstract partial class NeoView : ContentView
     {
+        public static readonly new BindableProperty BackgroundColorProperty = BindableProperty.Create(
+            propertyName: nameof(ContentView.BackgroundColor),
+            returnType: typeof(Color),
+            declaringType: typeof(NeoView),
+            defaultValue: Color.Transparent,
+            propertyChanged: OnVisualPropertyChanged);
+
+        public static readonly BindableProperty BackgroundGradientProperty = BindableProperty.Create(
+            propertyName: nameof(BackgroundGradient),
+            returnType: typeof(Gradient),
+            declaringType: typeof(NeoView),
+            defaultValue: null,
+            propertyChanged: OnVisualPropertyChanged);
+
         public static readonly BindableProperty ShadowBlurProperty = BindableProperty.Create(
             propertyName: nameof(ShadowBlur),
             returnType: typeof(double),
@@ -65,6 +78,18 @@ namespace Xamarin.Forms.NeoControls
             defaultValue: null,
             propertyChanged: OnInnerViewChanged);
 
+        public new Color BackgroundColor
+        {
+            get => (Color)GetValue(BackgroundColorProperty);
+            set => SetValue(BackgroundColorProperty, value);
+        }
+
+        public Gradient BackgroundGradient
+        {
+            get => (Gradient)GetValue(BackgroundGradientProperty);
+            set => SetValue(BackgroundGradientProperty, value);
+        }
+
         public double Elevation
         {
             get => (double)GetValue(ElevationProperty);
@@ -115,101 +140,98 @@ namespace Xamarin.Forms.NeoControls
 
         public NeoView() => InitializeComponent();
 
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-            if (BackgroundColorProperty.PropertyName.Equals(propertyName))
-                canvas.InvalidateSurface();
-        }
-
         protected virtual void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
             var surface = args.Surface;
             var canvas = surface.Canvas;
-
+            
             canvas.Clear();
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = BackgroundColor.ToSKColor();
                 paint.Style = SKPaintStyle.Fill;
+
+                var context = new RenderContext(canvas, paint, args.Info);
+                SetPaintColor(context);
 
                 var drawOuterShadow = ShadowDrawMode == ShadowDrawMode.All || ShadowDrawMode == ShadowDrawMode.OuterOnly;
                 var drawInnerShadow = ShadowDrawMode == ShadowDrawMode.All || ShadowDrawMode == ShadowDrawMode.InnerOnly;
 
-                PreDraw(paint, args);
+                PreDraw(context);
 
                 if (drawOuterShadow)
-                    DrawOuterShadow(paint, args);
+                    DrawOuterShadow(context);
 
-                paint.Color = BackgroundColor.ToSKColor();
-                DrawControl(paint, args);
+                SetPaintColor(context);
+                DrawControl(context);
 
                 if (drawInnerShadow)
-                    DrawInnerShadow(paint, args);
+                    DrawInnerShadow(context);
             }
         }
 
-        protected virtual void PreDraw(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected virtual void SetPaintColor(RenderContext context)
+        {
+            if (BackgroundGradient != null)
+                context.Paint.Shader = BackgroundGradient.BuildShader(context);
+            else
+                context.Paint.Color = BackgroundColor.ToSKColor();
+        }
+
+        protected virtual void PreDraw(RenderContext context)
         {
         }
 
-        protected virtual void DrawInnerShadow(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected virtual void DrawInnerShadow(RenderContext context)
         {
-            var info = args.Info;
-            var surface = args.Surface;
-            var canvas = surface.Canvas;
             var fShadowDistance = Convert.ToSingle(ShadowDistance);
             var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
             var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
                 0 : Convert.ToSingle(ShadowBlur * 2);
 
             var diameter = drawPadding * 2;
-            var retangleWidth = info.Width - diameter;
-            var retangleHeight = info.Height - diameter;
+            var retangleWidth = context.Info.Width - diameter;
+            var retangleHeight = context.Info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
+                context.Paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
 
-                canvas.ClipPath(path);
-                paint.Style = SKPaintStyle.Stroke;
-                paint.StrokeWidth = fShadowDistance;
+                context.Canvas.ClipPath(path);
+                context.Paint.Style = SKPaintStyle.Stroke;
+                context.Paint.StrokeWidth = fShadowDistance;
 
-                paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                canvas.DrawPath(path, paint);
+                context.Paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                context.Canvas.DrawPath(path, context.Paint);
 
-                paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
-                canvas.DrawPath(path, paint);
+                context.Paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
+                context.Canvas.DrawPath(path, context.Paint);
             }
         }
 
-        protected virtual void DrawOuterShadow(SKPaint paint, SKPaintSurfaceEventArgs args)
+        protected virtual void DrawOuterShadow(RenderContext context)
         {
-            var info = args.Info;
-            var surface = args.Surface;
-            var canvas = surface.Canvas;
             var fShadowDistance = Convert.ToSingle(ShadowDistance);
             var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
             var drawPadding = Convert.ToSingle(ShadowBlur * 2);
 
-            paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
+            context.Paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
 
             var diameter = drawPadding * 2;
-            var retangleWidth = info.Width - diameter;
-            var retangleHeight = info.Height - diameter;
+            var retangleWidth = context.Info.Width - diameter;
+            var retangleHeight = context.Info.Height - diameter;
 
             using (var path = CreatePath(retangleWidth, retangleHeight, drawPadding))
             {
-                paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
-                canvas.DrawPath(path, paint);
+                context.Paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
+                context.Canvas.DrawPath(path, context.Paint);
 
-                paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
-                canvas.DrawPath(path, paint);
+                context.Paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                context.Canvas.DrawPath(path, context.Paint);
             }
         }
 
-        protected abstract void DrawControl(SKPaint paint, SKPaintSurfaceEventArgs args);
+        protected abstract void DrawControl(RenderContext context);
 
         protected abstract SKPath CreatePath(float retangleWidth, float retangleHeight, float drawPadding);
 
