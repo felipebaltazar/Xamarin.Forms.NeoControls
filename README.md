@@ -75,3 +75,7 @@ xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoCon
 | `DarkShadowColor`   | The Dark color that will be applied on draw the dark shadow.          | This will be applied with `Elevation` property, as Alpha parameter.        |
 | `LightShadowColor`  | The White color that will be applied on draw the light shadow.        |                                                                            |
 | `BackgroundGradient`| Draw a gradient on background's control                               | When value != null, backgroundColor Property will be ignored               |
+
+
+## Contributors
+* [Pablo Erick](https://github.com/pabloprogramador) - Contributor
