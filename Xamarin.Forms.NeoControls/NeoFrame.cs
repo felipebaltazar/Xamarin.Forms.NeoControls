@@ -56,6 +56,7 @@ namespace Xamarin.Forms.NeoControls
         {
             renderContext.Paint.Style = SKPaintStyle.Stroke;
             renderContext.Paint.Color = BorderColor.ToSKColor();
+            renderContext.Paint.Shader = null;
             renderContext.Paint.StrokeWidth = Convert.ToSingle(BorderWidth);
             renderContext.Canvas.DrawPath(path, renderContext.Paint);
         }
