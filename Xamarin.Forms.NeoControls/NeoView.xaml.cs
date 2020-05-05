@@ -148,8 +148,6 @@ namespace Xamarin.Forms.NeoControls
             canvas.Clear();
             using (var paint = new SKPaint())
             {
-                
-
                 paint.IsAntialias = true;
                 paint.Style = SKPaintStyle.Fill;
 
