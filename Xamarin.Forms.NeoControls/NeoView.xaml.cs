@@ -167,8 +167,6 @@ namespace Xamarin.Forms.NeoControls
 
                 if (drawInnerShadow)
                     DrawInnerShadow(context);
-
-                
             }
         }
 
