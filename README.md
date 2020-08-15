@@ -1,6 +1,6 @@
 # Xamarin.Forms.NeoControls
 
- Neomorphic controls for Xamarin Forms
+Controls for Xamarin Forms based on neumorphism tendency
 
  [![NuGet](https://img.shields.io/nuget/v/Xamarin.Forms.NeoControls.svg)](https://www.nuget.org/packages/Xamarin.Forms.NeoControls/)
 
@@ -49,7 +49,7 @@ xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoCon
 - Background with gradient
 
 ```xml
-        <neo:NeoButton BackgroundColor="#e3edf7">
+        <neo:NeoButton>
             <neo:NeoButton.BackgroundGradient>
                 <neo:LinearGradient Angle="45">
                     <neo:GradientStop Color="Red" Offset="0" />
