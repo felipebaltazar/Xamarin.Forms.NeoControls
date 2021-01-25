@@ -132,5 +132,9 @@
       <Project>{833852DE-5AA1-4A3B-AFB8-41E2DD88CBF0}</Project>
       <Name>Xamarin.Forms.NeoControls.Demo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xamarin.Forms.NeoControls\Xamarin.Forms.NeoControls.csproj">
+      <Project>{c598b38b-4897-4d7e-96d1-abd59dd10753}</Project>
+      <Name>Xamarin.Forms.NeoControls</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

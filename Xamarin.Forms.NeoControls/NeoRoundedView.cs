@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.Globalization;
 using Xamarin.Forms.NeoControls.Extensions;
 
 namespace Xamarin.Forms.NeoControls
@@ -23,11 +24,19 @@ namespace Xamarin.Forms.NeoControls
 
         protected override SKPath CreatePath(float retangleWidth, float retangleHeight, float drawPadding)
         {
+            var realWidth = Width > 0 ? Width : WidthRequest;
+            var realHeight = Height > 0 ? Height : HeightRequest;
+
+            var scaleX = retangleWidth / realWidth;
+            var scaleY = retangleHeight / realHeight;
+
+            var scale = Math.Min(scaleX, scaleY);
+
             var path = new SKPath();
-            var fTopLeftRadius = Convert.ToSingle(CornerRadius.TopLeft);
-            var fTopRightRadius = Convert.ToSingle(CornerRadius.TopRight);
-            var fBottomLeftRadius = Convert.ToSingle(CornerRadius.BottomLeft);
-            var fBottomRightRadius = Convert.ToSingle(CornerRadius.BottomRight);
+            var fTopLeftRadius = Convert.ToSingle(CornerRadius.TopLeft * scale, CultureInfo.InvariantCulture);
+            var fTopRightRadius = Convert.ToSingle(CornerRadius.TopRight * scale, CultureInfo.InvariantCulture);
+            var fBottomLeftRadius = Convert.ToSingle(CornerRadius.BottomLeft * scale, CultureInfo.InvariantCulture);
+            var fBottomRightRadius = Convert.ToSingle(CornerRadius.BottomRight * scale, CultureInfo.InvariantCulture);
 
             var startX = fTopLeftRadius + drawPadding;
             var startY = drawPadding;

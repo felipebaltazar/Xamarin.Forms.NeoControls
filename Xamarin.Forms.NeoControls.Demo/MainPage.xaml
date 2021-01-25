@@ -4,34 +4,73 @@
              x:Class="Xamarin.Forms.NeoControls.Demo.MainPage">
 
     <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
-        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
-
-        <NeoButton HeightRequest="80"
-                   WidthRequest="80"
-                   CornerRadius="40"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center">
-            <NeoButton.BackgroundGradient>
-                <LinearGradient>
-                    <LinearGradient.Stops>
-                        <GradientStop Color="Red"/>
-                        <GradientStop Color="Blue"/>
-                    </LinearGradient.Stops>
-                </LinearGradient>
-            </NeoButton.BackgroundGradient>
-        </NeoButton>
-
-        <Button  HeightRequest="80"
-                 WidthRequest="80"
-                 CornerRadius="40"
-                 VerticalOptions="Center"
-                 HorizontalOptions="Center">
+        <NeoFrame BackgroundColor="#2196F3"
+                  CornerRadius="0,0,36,36"
+                  ShadowDrawMode="InnerOnly">
             
-        </Button>
+            <Label Text="Welcome to NeoControls!"
+                   HorizontalTextAlignment="Center"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   Margin="24"
+                   FontSize="36"/>
+        </NeoFrame>
+        
+        <Label Text="NeoButton" FontSize="Title" Padding="30,10,30,10"/>
+
+        <StackLayout Padding="25"
+                     Orientation="Horizontal"
+                     HorizontalOptions="FillAndExpand">
+            
+            <!--You can draw it rounded -->
+            <NeoButton HeightRequest="80"
+                       WidthRequest="80"
+                       CornerRadius="40"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+
+                <!-- Insert any view inside -->
+                <Label Text="Hello"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center"/>
+
+                <!-- Draw your background or gradient background -->
+                <NeoButton.BackgroundGradient>
+                    <LinearGradient Angle="45">
+                        <LinearGradient.Stops>
+                            <GradientStop Color="#F5F5F5"/>
+                            <GradientStop Color="#FFFFFF"/>
+                        </LinearGradient.Stops>
+                    </LinearGradient>
+                </NeoButton.BackgroundGradient>
+            </NeoButton>
+
+            <NeoButton HeightRequest="80"
+                       CornerRadius="40"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
+
+                <!-- Insert any view inside -->
+                <Label Text="Hello"
+                       FontSize="Title"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center"/>
+
+                <!-- Draw your background or gradient background -->
+                <NeoButton.BackgroundGradient>
+                    <LinearGradient Angle="1.2">
+                        <LinearGradient.Stops>
+                            <GradientStop Color="LightGray"/>
+                            <GradientStop Color="DimGray"/>
+                        </LinearGradient.Stops>
+                    </LinearGradient>
+                </NeoButton.BackgroundGradient>
+            </NeoButton>
+
+        </StackLayout>
+            
     </StackLayout>
 
 </ContentPage>
