@@ -14,4 +14,4 @@ jobs:
       with:
         dotnet-version: 3.1.200
     - name: Build with dotnet core
-      run: dotnet build **/Xamarin.Forms.NeoControls.sln --configuration Release
+      run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
