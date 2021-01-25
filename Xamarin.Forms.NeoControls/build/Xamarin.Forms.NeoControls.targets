@@ -1,0 +1,6 @@
+﻿<Project>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)PreserveNeoControls.cs"
+             Visible="false" />
+  </ItemGroup>
+</Project>
