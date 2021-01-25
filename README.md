@@ -19,49 +19,44 @@ https://github.com/felipebaltazar/NeomorphismSmartHomeApp
  Install-Package Xamarin.Forms.NeoControls -Version 1.1.0-pre
  ```
 
-- Add NeoControls namespace to your Xaml page/view
-
-```xaml
-xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
-```
-
+> No Xaml namespace declaration is needed
 - Use the controls
 
 ```xml
-        <neo:NeoButton Elevation=".25"
-                       CornerRadius="70,20,20,20"
-                       BackgroundColor="#e3edf7"/>
+    <NeoButton Elevation=".25"
+               CornerRadius="70,20,20,20"
+               BackgroundColor="#e3edf7"/>
 ```
 
 - You can also insert any view inside the neo controls
 
 ```xml
-        <neo:NeoButton BackgroundColor="#e3edf7">
+        <NeoButton BackgroundColor="#e3edf7">
             
             <StackLayout Orientation="Vertical">
                 <Image Source="MyImage.png "/>
                 <Label Text="My Button Label"/>
             </StackLayout>
             
-        </neo:NeoButton>
+        </NeoButton>
 ```
 
 - Background with gradient
 
 ```xml
-        <neo:NeoButton>
-            <neo:NeoButton.BackgroundGradient>
-                <neo:LinearGradient Angle="45">
-                    <neo:GradientStop Color="Red" Offset="0" />
-                    <neo:GradientStop Color="Yellow" Offset="1" />
-                </neo:LinearGradient>
-            </neo:NeoButton.BackgroundGradient>
+    <NeoButton>
+        <NeoButton.BackgroundGradient>
+            <LinearGradient Angle="45">
+                <GradientStop Color="Red" Offset="0" />
+                <GradientStop Color="Yellow" Offset="1" />
+            </LinearGradient>
+        </NeoButton.BackgroundGradient>
 
-            <StackLayout Orientation="Vertical">
-                <Image Source="MyImage.png "/>
-                <Label Text="My Button Label"/>
-            </StackLayout>
-        </neo:NeoButton>
+        <StackLayout Orientation="Vertical">
+            <Image Source="MyImage.png "/>
+            <Label Text="My Button Label"/>
+        </StackLayout>
+    </NeoButton>
 ```
 ## Property reference
 

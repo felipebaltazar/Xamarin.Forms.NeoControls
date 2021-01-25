@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,9 +8,9 @@
     <RepositoryUrl>https://github.com/felipebaltazar/Xamarin.Forms.NeoControls</RepositoryUrl>
     <PackageTags>neomorphism, xamarin, xamarin.forms, skia, neomorphic</PackageTags>
     <Description>Neomorphic controls for Xamarin.Forms</Description>
-    <Version>1.1.0-pre</Version>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.1-pre</Version>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
     <PackageIcon>Icon.png</PackageIcon>
   </PropertyGroup>
 
@@ -34,6 +34,8 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <Compile Remove="build\*.cs" />
+    <None Include="build\**\*.cs;build\**\*.targets" Pack="true" PackagePath="build" />
   </ItemGroup>
 
 </Project>
