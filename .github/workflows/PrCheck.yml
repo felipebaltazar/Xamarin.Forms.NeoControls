@@ -42,7 +42,7 @@ jobs:
         dotnet-version: 3.1.200
 
     - name: Build solution
-    - run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
+      run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
