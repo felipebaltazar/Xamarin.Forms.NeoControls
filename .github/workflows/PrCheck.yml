@@ -1,10 +1,11 @@
-name: Build Xamarin.Forms.NeoControls
+﻿name: Build Xamarin.Forms.NeoControls
 
 on: [pull_request]
 
 jobs:
   build:
 
+    name: Build with dotnet
     runs-on: windows-latest
     
     steps:
@@ -15,3 +16,33 @@ jobs:
         dotnet-version: 3.1.200
     - name: Build with dotnet core
       run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
+
+  analyze:
+
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    strategy:
+        fail-fast: false
+        matrix:
+            language: [ 'csharp' ]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.200
+
+    - name: Build solution
+      run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
