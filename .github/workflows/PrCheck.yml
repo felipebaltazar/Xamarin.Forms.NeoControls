@@ -37,7 +37,6 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build solution
-      uses: github/codeql-action/autobuild@v1
     - run: dotnet build Xamarin.Forms.NeoControls.sln --configuration Release
 
     - name: Perform CodeQL Analysis
