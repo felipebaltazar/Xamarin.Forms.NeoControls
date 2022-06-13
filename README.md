@@ -4,6 +4,10 @@ Controls for Xamarin Forms based on neumorphism tendency
 
  [![NuGet](https://img.shields.io/nuget/v/Xamarin.Forms.NeoControls.svg)](https://www.nuget.org/packages/Xamarin.Forms.NeoControls/)
 
+### FOR MAUI MIGRATION
+https://github.com/felipebaltazar/Maui.NeoControls
+
+
 ## Examples
 
 https://github.com/felipebaltazar/NeomorphismSmartHomeApp
