@@ -162,7 +162,7 @@ namespace Xamarin.Forms.NeoControls
                 if (drawOuterShadow)
                     DrawOuterShadow(context);
 
-                SetPaintColor(context);
+                //SetPaintColor(context);
                 DrawControl(context);
 
                 if (drawInnerShadow)
@@ -186,6 +186,8 @@ namespace Xamarin.Forms.NeoControls
         {
             var fShadowDistance = Convert.ToSingle(ShadowDistance);
             var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
+            var lightShadow = Color.FromRgba(LightShadowColor.R, LightShadowColor.G, LightShadowColor.B, Elevation);
+
             var drawPadding = ShadowDrawMode == ShadowDrawMode.InnerOnly ?
                 0 : Convert.ToSingle(ShadowBlur * 2);
 
@@ -201,7 +203,7 @@ namespace Xamarin.Forms.NeoControls
                 context.Paint.Style = SKPaintStyle.Stroke;
                 context.Paint.StrokeWidth = fShadowDistance;
 
-                context.Paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                context.Paint.ImageFilter = lightShadow.ToSKDropShadow(-fShadowDistance);
                 context.Canvas.DrawPath(path, context.Paint);
 
                 context.Paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
@@ -213,6 +215,7 @@ namespace Xamarin.Forms.NeoControls
         {
             var fShadowDistance = Convert.ToSingle(ShadowDistance);
             var darkShadow = Color.FromRgba(DarkShadowColor.R, DarkShadowColor.G, DarkShadowColor.B, Elevation);
+            var lightShadow = Color.FromRgba(LightShadowColor.R, LightShadowColor.G, LightShadowColor.B, Elevation);
             var drawPadding = Convert.ToSingle(ShadowBlur * 2);
 
             context.Paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, Convert.ToSingle(ShadowBlur));
@@ -226,7 +229,7 @@ namespace Xamarin.Forms.NeoControls
                 context.Paint.ImageFilter = darkShadow.ToSKDropShadow(fShadowDistance);
                 context.Canvas.DrawPath(path, context.Paint);
 
-                context.Paint.ImageFilter = LightShadowColor.ToSKDropShadow(-fShadowDistance);
+                context.Paint.ImageFilter = lightShadow.ToSKDropShadow(-fShadowDistance);
                 context.Canvas.DrawPath(path, context.Paint);
             }
         }
